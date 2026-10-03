@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roda na minha GPU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:#F4F2EE;color:#16181B;font-family:'IBM Plex Sans',system-ui,sans-serif}
+.mono{font-family:'IBM Plex Mono',monospace}
+.wrap{width:85%;margin:0 auto;padding:24px 0 64px;display:flex;flex-direction:column;gap:32px}
+.tabs{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 16px;border-bottom:1px solid #DEDAD3}
+.brand{font:700 18.5px 'IBM Plex Sans',sans-serif;color:#16181B;text-decoration:none;padding:12px 0}
+.tablist{display:flex;gap:4px;overflow-x:auto;max-width:100%}
+.tablist a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;font:500 17px 'IBM Plex Sans',sans-serif;color:#5C5F66;text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap}
+.tablist a:hover{color:#16181B}
+.tablist a[aria-current=page]{color:#16181B;font-weight:600;border-bottom-color:#B4430C}
+.tablist a:focus-visible,.test:focus-visible,.chip:focus-visible,.stat:focus-visible{outline:2px solid #B4430C;outline-offset:2px}
+.eyebrow{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:#5C5F66}
+h1{margin:0;font-size:clamp(39px,6.9vw,55px);line-height:1.05;letter-spacing:-.02em}
+.lead{margin:0;max-width:none;font-size:20.5px;line-height:1.5;color:#3A3D43}
+.row{display:flex;flex-wrap:wrap;gap:12px}
+.stat{display:flex;align-items:center;gap:10px;min-height:44px;padding:10px 14px;background:#fff;border:1px solid #DEDAD3;border-radius:10px;font:16px 'IBM Plex Sans',sans-serif;color:#3A3D43;cursor:pointer}
+.stat:hover{border-color:#9A958C}
+.stat[aria-pressed=true]{border:2px solid #16181B;padding:9px 13px}
+.stat b{font-family:'IBM Plex Mono',monospace;font-size:25.5px}
+.cat-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.cat-head h2{margin:0;font-size:30px;font-weight:600}
+input[type=search]{min-height:44px;width:240px;max-width:100%;padding:0 12px;font:17px 'IBM Plex Sans',sans-serif;background:#fff;border:1px solid #CFCAC1;border-radius:8px}
+.chip{min-height:40px;padding:0 16px;font:500 16px 'IBM Plex Sans',sans-serif;border-radius:999px;cursor:pointer;color:#16181B;background:#fff;border:1px solid #CFCAC1}
+.chip[aria-pressed=true]{color:#fff;background:#16181B;border-color:#16181B}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.card{background:#fff;border:1px solid #DEDAD3;border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.card h3{margin:0;font-size:19.5px;font-weight:600;line-height:1.3}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.badge{flex-shrink:0;font-size:14px;font-weight:600;padding:4px 8px;border-radius:6px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;font:15px 'IBM Plex Mono',monospace;color:#3A3D43}
+.score{display:flex;align-items:center;gap:10px;font:600 15px 'IBM Plex Mono',monospace}
+.track{flex-grow:1;height:6px;background:#ECE8E1;border-radius:3px;overflow:hidden}
+.track i{display:block;height:100%}
+.card p{margin:0;font-size:16px;line-height:1.5;color:#2A2D32}
+.use{font-size:15px;line-height:1.5;color:#4A4D53}
+.use b{color:#16181B;font-weight:600}
+.note{font-size:14px;color:#6A5A3A}
+.test{flex-shrink:0;text-decoration:none;display:inline-flex;align-items:center;min-height:40px;padding:0 14px;font-size:16px;font-weight:600;color:#B4430C;border:1px solid #E2B79E;border-radius:8px;text-decoration:none;background:none;cursor:pointer;font-family:inherit}
+footer{border-top:1px solid #DEDAD3;padding-top:20px;font-size:15px;line-height:1.6;color:#5C5F66}
+.sec-head h2{margin:0;font-size:30px;font-weight:600}
+.sub{margin:4px 0 0;font-size:17px;color:#5C5F66}
+.picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(max(260px,calc(25% - 11px)),1fr));gap:14px}
+.pick{background:#fff;border:1px solid #DEDAD3;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.pick .task{font:600 14px 'IBM Plex Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:#B4430C}
+.pick h3{margin:0;font-size:20.5px;font-weight:600;line-height:1.3}
+.pick p{margin:0;font-size:16px;line-height:1.5;color:#2A2D32}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:auto}
+.cmd{display:flex;align-items:center;gap:6px;flex:1 1 200px;min-width:0;background:#15171A;border-radius:8px;padding:4px 4px 4px 10px}
+.cmd code{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;font:14.5px 'IBM Plex Mono',monospace;color:#ECEAE5;padding:6px 0}
+.copy{flex-shrink:0;min-height:32px;padding:0 10px;font:600 14px 'IBM Plex Sans',sans-serif;color:#15171A;background:#F28C4B;border:0;border-radius:6px;cursor:pointer}
+.find{font-size:15px;font-weight:600;color:#B4430C;text-decoration:none}
+.find:hover{text-decoration:underline}
+@media (max-width:760px){.wrap{width:calc(100% - 32px)}}
+@media (max-width:480px){.tablist{gap:0}.tablist a{padding:0 9px;font-size:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="tabs" aria-label="Seções do site">
+<a class="brand" href="index.html">Roda na minha GPU?</a>
+<div class="tablist">
+<a href="index.html" aria-current="page">Catálogo</a>
+<a href="comparar.html">Comparativo</a>
+<a href="como-calculamos.html">Como calculamos</a>
+</div>
+</nav>
+<header style="display:flex;flex-direction:column;gap:16px">
+<div class="eyebrow mono">Meu PC · Xeon E5-2620 v3 · RTX 3060 12 GB · 64 GB DDR4 · NVMe 256 GB + SSD 1 TB</div>
+<h1>Roda na minha GPU?</h1>
+<p class="lead">Para que serve cada modelo de IA local e como ele roda na sua RTX 3060.</p>
+<div class="row" id="summary"></div>
+</header>
+
+<section id="melhores" style="display:flex;flex-direction:column;gap:16px">
+<div class="sec-head"><h2>Melhores para o meu PC</h2><p class="sub">Uma escolha por tarefa, equilibrando qualidade e velocidade na RTX 3060 12 GB.</p></div>
+<div class="picks" id="picks"></div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div class="cat-head">
+<h2 id="catalogo" style="scroll-margin-top:16px">Catálogo <span class="mono" id="count" style="font-size:18.5px;font-weight:500;color:#5C5F66"></span> <button type="button" class="chip" id="clear-level" hidden aria-pressed="true" style="vertical-align:middle;margin-left:4px"></button></h2>
+<label style="display:flex;align-items:center;gap:8px;font-size:16px;color:#3A3D43">Buscar <input type="search" id="q" placeholder="ex.: qwen, código, visão"></label>
+</div>
+<div class="row" id="chips" style="gap:8px"></div>
+<div class="grid" id="grid"></div>
+<p id="empty" hidden style="margin:0;font-size:17px;color:#5C5F66">Nenhum modelo encontrado com esse filtro.</p>
+</section>
+
+<footer>Nota (0–100), tamanho e tok/s: estimativas do canirun.ai para RTX 3060 12 GB. Simulação aproximada (1 token ≈ 4 caracteres). Modelos acima de 12 GB usam a RAM do sistema e ficam bem mais lentos. Modelos de imagem e vídeo não geram texto, por isso aparecem com ~0 tok/s. Áudio e embeddings não usam tok/s: a nota deles vem do tamanho, e o tamanho é aproximado (FP16, salvo indicação). Modelos marcados como "Novo" são encontrados automaticamente no Hugging Face e têm números estimados.<span id="updated"></span></footer>
+</div>
+
+<script src="site.js"></script>
+<script>
+const CHIPS = [["all","Todos"],["chat","Chat"],["reason","Raciocínio"],["vis","Visão"],["code","Código"],["img","Imagem"],["vid","Vídeo"],["stt","Fala → texto"],["tts","Texto → fala"],["emb","Embeddings"],["light","Leves (até 3 GB)"],["new","Novos"]];
+let filter = "all", q = "", level = null;
+
+// Melhores escolhas por tarefa (curadoria para a RTX 3060 12 GB)
+const PICKS = [
+  ["Assistente do dia a dia", "GPT-OSS 20B", "O mais forte que cabe inteiro na placa e, por ser MoE, muito rápido. Aparece como Usável porque ocupa quase toda a VRAM e sobra pouco espaço para conversas longas."],
+  ["Escrever em português", "Gemma 3 12B", "Texto natural em português, cabe com folga e também lê imagens."],
+  ["Programar", "Qwen 2.5 Coder 7B", "Gera e explica código rápido. Para autocompletar no editor, use a versão 1.5B."],
+  ["Raciocínio e matemática", "Qwen 3 14B", "Pensa antes de responder e mantém boa velocidade, sem sair da placa."],
+  ["Ler imagens e documentos", "Qwen3-VL 8B", "Lê prints, PDFs escaneados e gráficos, com folga para imagens grandes."],
+  ["Maior que ainda roda bem", "Qwen3-VL 30B-A3B", "MoE de 30B: passa dos 12 GB e usa a RAM, mas continua rápido."],
+  ["Transcrever áudio", "Whisper Large v3 Turbo", "Transcreve reuniões e vídeos em português com ótima precisão."],
+  ["Buscar nos seus documentos", "BGE-M3", "Embeddings multilíngues: a base para conversar com seus PDFs."],
+];
+const testLink = (m) => m.tps > 0 ? `<a class="test" href="${testHref(m)}" data-test="${esc(slug(m.n))}">Testar velocidade</a>` : "";
+
+function renderPicks() {
+  $("picks").innerHTML = PICKS.map(([task, name, why]) => {
+    const m = find(name); if (!m) return "";
+    const [label, fg, bg] = status(m.s);
+    const speed = m.tps > 0 ? `~${m.tps} tok/s` : (NO_TPS[m.c] || "");
+    return `<article class="pick">
+<span class="task">${esc(task)}</span>
+<div class="top"><h3>${esc(m.n)}</h3><span class="badge" style="color:${fg};background:${bg}">${label}</span></div>
+<div class="meta"><span>${fmt(m.gb, 1)} GB</span><span>${speed}</span></div>
+<p>${esc(why)}</p>
+<div class="actions">${cmdHtml(m)}${testLink(m)}</div>
+</article>`;
+  }).join("");
+}
+function renderSummary() {
+  const counts = [0, 0, 0, 0];
+  MODELS.forEach((m) => counts[levelOf(m)]++);
+  $("summary").innerHTML = LEVELS.map((l, i) =>
+    `<button class="stat" type="button" data-level="${i}" aria-pressed="${i === level}"><b style="color:${status([80, 40, 10, 0][i])[1]}">${counts[i]}</b>${l}</button>`).join("");
+  $("clear-level").hidden = level === null;
+  $("clear-level").textContent = level === null ? "" : `Só "${LEVELS[level]}" ✕`;
+}
+function renderChips() {
+  $("chips").innerHTML = CHIPS.map(([id, l]) =>
+    `<button class="chip" type="button" data-f="${id}" aria-pressed="${id === filter}">${l}</button>`).join("");
+}
+function renderGrid() {
+  const query = q.trim().toLowerCase();
+  const list = MODELS.filter((m) => {
+    if (level !== null && levelOf(m) !== level) return false;
+    if (filter === "light" && m.gb > 3) return false;
+    if (filter === "new" && !m.auto) return false;
+    if (filter === "reason" && !m.r) return false;
+    if (!["all", "light", "new", "reason"].includes(filter) && m.c !== filter) return false;
+    return !query || (m.n + " " + m.d + " " + m.u + " " + CAT[m.c]).toLowerCase().includes(query);
+  });
+  $("count").textContent = `${list.length} de ${MODELS.length}`;
+  $("empty").hidden = list.length > 0;
+  $("grid").innerHTML = list.map((m) => {
+    const [label, fg, bg] = status(m.s);
+    const speed = m.tps > 0 ? `~${m.tps} tok/s` : (NO_TPS[m.c] || "—");
+    return `<article class="card">
+<div class="top"><h3>${esc(m.n)}</h3><span class="badge" style="color:${fg};background:${bg}">${label}</span></div>
+<div class="meta"><span>${CAT[m.c]}${m.r ? " · raciocina" : ""}</span><span>${fmt(m.gb, 1)} GB · ${fitText(m)}</span><span>${speed}</span></div>
+<div class="score"><div class="track"><i style="width:${m.s}%;background:${fg}"></i></div>${m.s}/100</div>
+<p>${esc(m.d)}</p>
+<div class="use"><b>Use para:</b> ${esc(m.u)}</div>
+${m.unsure ? '<div class="note">Resumo baseado no nome do modelo — confirme no model card.</div>' : ""}
+${m.auto ? `<div class="note">Novo · adicionado automaticamente em ${esc(m.added)}. Nota e velocidade estimadas para este PC; descrição montada com os dados do Hugging Face. <a href="https://huggingface.co/${esc(m.id)}" target="_blank" rel="noopener">Ver no Hugging Face</a></div>` : ""}
+<div class="actions">${cmdHtml(m)}${testLink(m)}</div>
+</article>`;
+  }).join("");
+}
+
+// Guarda o modelo escolhido também no navegador, caso o link perca o "#modelo"
+document.addEventListener("click", (e) => {
+  const t = e.target.closest("[data-test]");
+  if (t) { try { localStorage.setItem("rmg-comparar", t.dataset.test); } catch {} }
+});
+$("q").oninput = (e) => { q = e.target.value; renderGrid(); };
+$("chips").onclick = (e) => { const b = e.target.closest("[data-f]"); if (b) { filter = b.dataset.f; renderChips(); renderGrid(); } };
+$("summary").onclick = (e) => {
+  const b = e.target.closest("[data-level]");
+  if (!b) return;
+  level = level === +b.dataset.level ? null : +b.dataset.level;
+  renderSummary(); renderGrid();
+  if (level !== null) $("catalogo").scrollIntoView({ behavior: "smooth" });
+};
+$("clear-level").onclick = () => { level = null; renderSummary(); renderGrid(); };
+
+renderSummary(); renderPicks(); renderChips(); renderGrid();
+loadAutoModels((data) => {
+  $("updated").textContent = ` Lista de modelos novos atualizada em ${new Date(data.updated).toLocaleDateString("pt-BR")}.`;
+  renderSummary(); renderGrid();
+});
+</script>
+</body>
+</html>

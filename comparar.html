@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comparativo — Roda na minha GPU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:#F4F2EE;color:#16181B;font-family:'IBM Plex Sans',system-ui,sans-serif}
+.mono{font-family:'IBM Plex Mono',monospace}
+.wrap{width:85%;margin:0 auto;padding:24px 0 28px;display:flex;flex-direction:column;gap:28px}
+.tabs{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 16px;border-bottom:1px solid #DEDAD3}
+.brand{font:700 18.5px 'IBM Plex Sans',sans-serif;color:#16181B;text-decoration:none;padding:12px 0}
+.tablist{display:flex;gap:4px;overflow-x:auto;max-width:100%}
+.tablist a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;font:500 17px 'IBM Plex Sans',sans-serif;color:#5C5F66;text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap}
+.tablist a:hover{color:#16181B}
+.tablist a[aria-current=page]{color:#16181B;font-weight:600;border-bottom-color:#B4430C}
+.tablist a:focus-visible,.seg button:focus-visible,.btn:focus-visible{outline:2px solid #B4430C;outline-offset:2px}
+.eyebrow{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:#5C5F66}
+h1{margin:0;font-size:clamp(37px,5.75vw,50.5px);line-height:1.05;letter-spacing:-.02em;text-wrap:balance}
+.lead{margin:0;max-width:none;font-size:19.5px;line-height:1.5;color:#3A3D43}
+.badge{flex-shrink:0;font-size:14px;font-weight:600;padding:4px 8px;border-radius:6px}
+.cmd{display:flex;align-items:center;gap:6px;min-width:0;background:#0D0F11;border-radius:8px;padding:4px 4px 4px 10px}
+.cmd code{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;font:14.5px 'IBM Plex Mono',monospace;color:#ECEAE5;padding:6px 0}
+.copy{flex-shrink:0;min-height:32px;padding:0 10px;font:600 14px 'IBM Plex Sans',sans-serif;color:#15171A;background:#F28C4B;border:0;border-radius:6px;cursor:pointer}
+.find{font-size:15px;font-weight:600;color:#F28C4B;text-decoration:none}
+.find:hover{text-decoration:underline}
+#arena{background:#15171A;color:#ECEAE5;padding:32px 0 40px}
+.arena-in{width:85%;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.wrap-end{padding-top:20px;padding-bottom:64px}
+.muted{font-size:16px;color:#A9ADB4}
+.seg{display:inline-flex;background:#23262B;border-radius:10px;padding:4px;gap:4px;align-self:flex-start}
+.seg button{min-height:40px;padding:0 16px;font:600 16px 'IBM Plex Sans',sans-serif;color:#A9ADB4;background:transparent;border:0;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed=true]{background:#ECEAE5;color:#15171A}
+.ctrls{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px}
+label.pick-l{display:flex;flex-direction:column;gap:6px;font-size:15px;color:#A9ADB4}
+.vs{align-self:center;margin-top:18px;font:600 16px 'IBM Plex Mono',monospace;color:#F28C4B}
+select{min-height:44px;width:230px;max-width:100%;padding:0 12px;font:17px 'IBM Plex Sans',sans-serif;color:#ECEAE5;background:#23262B;border:1px solid #3A3E45;border-radius:8px}
+.btn{min-height:44px;padding:0 20px;font:600 17px 'IBM Plex Sans',sans-serif;color:#fff;background:#B4430C;border:0;border-radius:8px;cursor:pointer}
+.btn.ghost{color:#ECEAE5;background:transparent;border:1px solid #3A3E45;font-weight:400}
+.lanes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.lanes.single{grid-template-columns:minmax(0,1fr)}
+.lane{background:#1E2125;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.lane-head{display:flex;align-items:center;gap:10px;min-width:0}
+.lane-name{flex:1;min-width:0;font-size:18.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;background:#F28C4B;color:#15171A;font:700 15px 'IBM Plex Mono',monospace;flex-shrink:0}
+#laneB .tag,.cmp th.colB .tag{background:#7EB2E8}
+#laneC .tag,.cmp th.colC .tag,.brow.C .tag{background:#C9A3F0}
+#laneC .prog i{background:#C9A3F0}
+.brow.B .tag{background:#7EB2E8}
+.ctrl-row{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px}
+.run{display:flex;gap:10px}
+.ctrl-row.three{flex-direction:column;align-items:stretch;gap:12px}
+.ctrl-row.three .ctrls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.ctrl-row.three .vs{display:none}
+.ctrl-row.three select{width:100%}
+.lane-stat{display:none;font:15px 'IBM Plex Mono',monospace;color:#C9CDD3;font-variant-numeric:tabular-nums}
+.lanes.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.lanes.three .lane-stat{display:block}
+.lanes.three .lane-kpis,.lanes.three .model-bar-label{display:none}
+.lanes.three .bar-row{grid-template-columns:minmax(0,1fr)}
+.lanes.three .term{height:max(240px,40vh)}
+.lanes.three .term pre{font-size:14.5px}
+.lane.first{box-shadow:inset 0 0 0 2px #8FDCA6}
+.board{background:#1E2125;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.board h2{margin:0;font-size:18.5px;color:#F28C4B}
+.brow{display:grid;grid-template-columns:30px minmax(0,190px) minmax(0,1fr) 86px;gap:12px;align-items:center;font-size:16px}
+.brow .pos{font:600 16px 'IBM Plex Mono',monospace;color:#A9ADB4}
+.brow .nm{display:flex;align-items:center;gap:8px;min-width:0}
+.brow .nm b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.brow .bt{height:14px;border-radius:4px;background:#F28C4B;min-width:4px}
+.brow.B .bt{background:#7EB2E8}.brow.C .bt{background:#C9A3F0}
+.brow .tm{font:600 16px 'IBM Plex Mono',monospace;text-align:right;font-variant-numeric:tabular-nums}
+@media (max-width:1000px){.lanes.three{grid-template-columns:minmax(0,1fr)}.lanes.three .term{height:170px}.ctrl-row.three .ctrls{grid-template-columns:minmax(0,1fr)}}
+
+.lanes.single .tag{display:none}
+.lane-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px}
+.lane-kpis div{background:#15171A;border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.lane-kpis span{font-size:12.5px;color:#A9ADB4}
+.lane-kpis b{font:600 18.5px 'IBM Plex Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar-row{display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px;align-items:center;font-size:14px;color:#A9ADB4}
+.prog{height:8px;background:#2A2D32;border-radius:4px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:#F28C4B}
+#laneB .prog i{background:#7EB2E8}
+.prog.read i{background:#6B7078}
+.term{background:#0D0F11;border:1px solid #2A2D32;border-radius:10px;padding:14px;height:max(260px,42vh);overflow:auto}
+.lanes.single .term{height:max(320px,50vh)}
+.term pre{margin:0;white-space:pre-wrap;word-break:break-word;font:15px/1.6 'IBM Plex Mono',monospace;color:#E4E2DC}
+.ask{color:#8D929A}
+.caret{color:#F28C4B}
+.lane-foot{font-size:15px;color:#A9ADB4}
+.lane-foot.done{color:#8FDCA6;font-weight:600}
+.verdict{margin:0;padding:12px 14px;border-radius:10px;background:#2A1A10;color:#F7C39C;font-size:17px;font-weight:600;line-height:1.5}
+.diff{background:#1E2125;border-radius:12px;padding:14px 16px}
+.diff h2{margin:0 0 8px;font-size:18.5px;color:#F28C4B}
+.diff ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px}
+.diff li{font-size:16px;line-height:1.5;color:#E4E2DC;max-width:80ch}
+.diff b{color:#FFFFFF}
+.cmp-wrap{overflow-x:auto;background:#1E2125;border-radius:12px}
+.cmp{width:100%;border-collapse:collapse;table-layout:fixed;font-size:16px}
+.cmp th,.cmp td{text-align:left;padding:10px 12px;border-bottom:1px solid #2A2D32;vertical-align:top}
+.cmp thead th{font-weight:600;color:#ECEAE5}
+.cmp tbody th{width:24%;font-weight:400;color:#A9ADB4}
+.cmp td.win{color:#8FDCA6;font-weight:600}
+.cmp td.win::after{content:" ✓"}
+.how{margin:0;font-size:15px;color:#5C5F66;line-height:1.6}
+.how a{color:#B4430C}
+@media (max-width:760px){
+.lanes{grid-template-columns:minmax(0,1fr)}
+.cmp.three{min-width:620px}
+.brow{grid-template-columns:24px minmax(0,1fr) 64px;row-gap:6px}.brow .pos{grid-row:1}.brow .nm{grid-column:2;grid-row:1}.brow .tm{grid-column:3;grid-row:1}.brow .bar{grid-column:2/4;grid-row:2}
+.seg{align-self:stretch}.seg button{flex:1;padding:0 8px;white-space:nowrap;font-size:15px}
+#arena{padding:24px 0 32px}
+select{width:100%}
+label.pick-l{flex:1 1 100%}
+.vs{display:none}
+.term,.lanes.single .term{height:200px}
+.cmp{font-size:15px}.cmp th,.cmp td{padding:8px}
+.cmp .cmd{flex-direction:column;align-items:stretch;padding:6px}
+.bar-row{grid-template-columns:110px minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+@media (max-width:760px){.wrap,.arena-in{width:calc(100% - 32px)}}
+@media (max-width:480px){.tablist{gap:0}.tablist a{padding:0 9px;font-size:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="tabs" aria-label="Seções do site">
+<a class="brand" href="index.html">Roda na minha GPU?</a>
+<div class="tablist">
+<a href="index.html">Catálogo</a>
+<a href="comparar.html" aria-current="page">Comparativo</a>
+<a href="como-calculamos.html">Como calculamos</a>
+</div>
+</nav>
+
+<header style="display:flex;flex-direction:column;gap:12px">
+<div class="eyebrow mono">RTX 3060 12 GB · 64 GB DDR4</div>
+<h1>Comparativo</h1>
+<p class="lead">Teste um modelo sozinho ou compare até três escrevendo a mesma resposta, no ritmo do seu PC.</p>
+</header>
+</div>
+
+<section id="arena" aria-label="Simulação">
+<div class="arena-in">
+<div class="seg" role="group" aria-label="Modo">
+<button type="button" id="mode1" data-mode="1" aria-pressed="false">Um modelo</button>
+<button type="button" id="mode2" data-mode="2" aria-pressed="true">Dois modelos</button>
+<button type="button" id="mode3" data-mode="3" aria-pressed="false">Três modelos</button>
+</div>
+<div class="ctrl-row" id="ctrlRow">
+<div class="ctrls">
+<label class="pick-l" id="labA"><span id="labAText">Modelo A</span><select id="selA"></select></label>
+<span class="vs" id="vs" aria-hidden="true">vs</span>
+<label class="pick-l" id="labB">Modelo B<select id="selB"></select></label>
+<span class="vs" id="vs2" aria-hidden="true">vs</span>
+<label class="pick-l" id="labC">Modelo C<select id="selC"></select></label>
+</div>
+<div class="run">
+<button class="btn" id="go" type="button">Começar corrida</button>
+<button class="btn ghost" id="stop" type="button">Parar</button>
+</div>
+</div>
+
+<div class="lanes" id="lanes">
+<div class="lane" id="laneA">
+<div class="lane-head"><span class="tag">A</span><b class="lane-name"></b><span class="badge"></span></div>
+<div class="lane-stat"></div>
+<div class="lane-kpis"><div><span>Velocidade</span><b class="k-tps"></b></div><div><span>Tokens</span><b class="k-n"></b></div><div><span>Tempo</span><b class="k-t"></b></div><div><span>500 tokens em</span><b class="k-500"></b></div></div>
+<div class="bars">
+<div class="bar-row"><span class="model-bar-label">Modelo</span><div class="prog"><i></i></div></div>
+<div class="bar-row reader"><span>Você lendo (~5 tok/s)</span><div class="prog read"><i></i></div></div>
+</div>
+<div class="term"><pre><span class="ask"></span><span class="out"></span><span class="caret"></span></pre></div>
+<div class="lane-foot"></div>
+</div>
+<div class="lane" id="laneB">
+<div class="lane-head"><span class="tag">B</span><b class="lane-name"></b><span class="badge"></span></div>
+<div class="lane-stat"></div>
+<div class="lane-kpis"><div><span>Velocidade</span><b class="k-tps"></b></div><div><span>Tokens</span><b class="k-n"></b></div><div><span>Tempo</span><b class="k-t"></b></div><div><span>500 tokens em</span><b class="k-500"></b></div></div>
+<div class="bars">
+<div class="bar-row"><span class="model-bar-label">Modelo</span><div class="prog"><i></i></div></div>
+</div>
+<div class="term"><pre><span class="ask"></span><span class="out"></span><span class="caret"></span></pre></div>
+<div class="lane-foot"></div>
+</div>
+<div class="lane" id="laneC">
+<div class="lane-head"><span class="tag">C</span><b class="lane-name"></b><span class="badge"></span></div>
+<div class="lane-stat"></div>
+<div class="lane-kpis"><div><span>Velocidade</span><b class="k-tps"></b></div><div><span>Tokens</span><b class="k-n"></b></div><div><span>Tempo</span><b class="k-t"></b></div><div><span>500 tokens em</span><b class="k-500"></b></div></div>
+<div class="bars">
+<div class="bar-row"><span class="model-bar-label">Modelo</span><div class="prog"><i></i></div></div>
+</div>
+<div class="term"><pre><span class="ask"></span><span class="out"></span><span class="caret"></span></pre></div>
+<div class="lane-foot"></div>
+</div>
+</div>
+
+<p class="verdict" id="verdict" aria-live="polite"></p>
+<div class="board" id="board" hidden></div>
+<div class="diff" id="diff"></div>
+<div class="cmp-wrap"><table class="cmp" id="cmpTable"></table></div>
+</div>
+</section>
+
+<div class="wrap wrap-end">
+<p class="how">A simulação mostra só a velocidade de escrita; o texto é sempre o mesmo exemplo, para a comparação ser justa. Uma pessoa lê em torno de 5 tok/s. Para entender de onde vêm os números, veja <a href="como-calculamos.html">Como calculamos</a>.</p>
+</div>
+
+<script src="site.js"></script>
+<script>
+const QUESTIONS = {
+  chat: ">>> Quais as vantagens de rodar IA no meu próprio computador?\n\n",
+  code: ">>> Escreva em Python uma função que some as vendas por categoria a partir de um CSV.\n\n",
+};
+const KEY = "rmg-comparar";
+const LETTERS = ["A", "B", "C"];
+const DEFAULTS = ["Qwen 3 14B", "Qwen 3 32B", "GPT-OSS 20B", "Gemma 3 12B", "Qwen3-VL 8B"];
+let mode = 2, timer = null, pending = null;
+const slots = { A: "Qwen 3 14B", B: "Qwen 3 32B", C: "GPT-OSS 20B" };
+
+const lane = (x) => {
+  const el = $("lane" + x), qs = (c) => el.querySelector(c);
+  return { el, name: qs(".lane-name"), badge: qs(".badge"), tps: qs(".k-tps"), n: qs(".k-n"), t: qs(".k-t"), k500: qs(".k-500"),
+    stat: qs(".lane-stat"), bar: qs(".prog i"), read: qs(".prog.read i"), ask: qs(".ask"), out: qs(".out"), caret: qs(".caret"), term: qs(".term"), foot: qs(".lane-foot") };
+};
+const active = () => LETTERS.slice(0, mode);
+const chosen = () => active().map((x) => find(slots[x]));
+const kind = () => chosen().every((m) => m.c === "code") ? "code" : "chat";
+const raceTokens = () => TOKENS[kind()];
+const B = (m) => `<b>${esc(m.n)}</b>`;
+const joinNames = (ms) => ms.length === 1 ? B(ms[0]) : ms.slice(0, -1).map(B).join(", ") + " e " + B(ms[ms.length - 1]);
+
+// ---------- Estado (comparar.html#modelo, #a~b ou #a~b~c) ----------
+function readState() {
+  let h = "";
+  try { h = decodeURIComponent(location.hash.slice(1)); } catch {}
+  if (!h) { try { h = localStorage.getItem(KEY) || ""; } catch {} }
+  return h;
+}
+function applyState(h) {
+  if (!h) return true;
+  const parts = h.split("~").slice(0, 3).map(bySlug);
+  if (parts.some((m) => !m || m.tps <= 0)) return false;
+  mode = parts.length;
+  parts.forEach((m, i) => (slots[LETTERS[i]] = m.n));
+  return true;
+}
+function saveState() {
+  const h = active().map((x) => slug(slots[x])).join("~");
+  try { history.replaceState(null, "", "#" + h); } catch {}
+  try { localStorage.setItem(KEY, h); } catch {}
+}
+// Ao abrir uma raia nova, escolhe um modelo que ainda não está em uso
+function fillSlots() {
+  active().forEach((x, i) => {
+    const used = active().slice(0, i).map((y) => slots[y]);
+    if (used.includes(slots[x])) slots[x] = DEFAULTS.find((n) => !used.includes(n) && find(n));
+  });
+}
+
+// ---------- Desenho ----------
+function renderOptions() {
+  const opts = MODELS.filter((m) => m.tps > 0).map((m) => `<option value="${esc(m.n)}">${esc(m.n)} — ~${m.tps} tok/s</option>`).join("");
+  LETTERS.forEach((x) => { $("sel" + x).innerHTML = opts; $("sel" + x).value = slots[x]; });
+}
+function renderMode() {
+  [1, 2, 3].forEach((k) => $("mode" + k).setAttribute("aria-pressed", mode === k));
+  $("labB").hidden = $("vs").hidden = $("laneB").hidden = mode < 2;
+  $("labC").hidden = $("vs2").hidden = $("laneC").hidden = mode < 3;
+  $("lanes").classList.toggle("single", mode === 1);
+  $("lanes").classList.toggle("three", mode === 3);
+  $("ctrlRow").classList.toggle("three", mode === 3);
+  $("board").hidden = mode !== 3;
+  $("labAText").textContent = mode === 1 ? "Modelo" : "Modelo A";
+  $("go").textContent = mode === 1 ? "Gerar resposta" : "Começar corrida";
+  lane("A").el.querySelector(".reader").hidden = mode !== 1;
+  LETTERS.forEach((x) => lane(x).el.classList.remove("first"));
+}
+function paintLane(x, n, sec, running) {
+  const m = find(slots[x]), L = lane(x), toks = raceTokens(), total = toks.length / m.tps;
+  L.tps.textContent = `${m.tps} tok/s`;
+  L.n.textContent = `${n} / ${toks.length}`;
+  L.t.textContent = secs(Math.min(sec, total));
+  L.k500.textContent = secs(500 / m.tps);
+  L.stat.textContent = `${m.tps} tok/s · ${n}/${toks.length} tokens · ${secs(Math.min(sec, total))}`;
+  L.bar.style.width = `${(n / toks.length) * 100}%`;
+  if (L.read) L.read.style.width = `${Math.min(1, (sec * 5) / toks.length) * 100}%`;
+  L.ask.textContent = QUESTIONS[kind()];
+  L.out.textContent = n === 0 && !running ? `(${m.n} vai responder aqui. Clique em "${mode === 1 ? "Gerar resposta" : "Começar corrida"}".)` : toks.slice(0, n).join("");
+  L.caret.textContent = running && n < toks.length ? "▌" : "";
+  const done = n >= toks.length;
+  L.foot.textContent = done ? `Terminou em ${secs(total)}` : m.tps < 5 ? "Mais lento do que você lê" : m.tps < 20 ? "Dá para acompanhar lendo" : "Mais rápido do que você lê";
+  L.foot.className = "lane-foot" + (done ? " done" : "");
+  if (running) L.term.scrollTop = L.term.scrollHeight;
+}
+// Marca com ✓ o melhor valor de cada linha (só quando há diferença)
+function winners(vals, higher) {
+  if (vals.length < 2 || vals.every((v) => v === vals[0])) return vals.map(() => "");
+  const best = higher ? Math.max(...vals) : Math.min(...vals);
+  return vals.map((v) => (v === best ? "win" : ""));
+}
+function renderTable() {
+  const ms = chosen(), xs = active();
+  const head = ms.length === 1 ? `<tr><th></th><th>Ficha de ${esc(ms[0].n)}</th></tr>`
+    : `<tr><th></th>${ms.map((m, i) => `<th class="col${xs[i]}"><span class="tag">${xs[i]}</span> ${esc(m.n)}</th>`).join("")}</tr>`;
+  const rows = [
+    ["Categoria", (m) => CAT[m.c] + (m.r ? " · raciocina" : "")],
+    ["Rótulo e nota", (m) => `${status(m.s)[0]} · ${m.s}/100`, (m) => m.s, true],
+    ["Velocidade", (m) => `~${m.tps} tok/s`, (m) => m.tps, true],
+    ["Resposta de 500 tokens", (m) => secs(500 / m.tps), (m) => m.tps, true],
+    ["Tamanho", (m) => `${fmt(m.gb, 1)} GB`, (m) => m.gb, false],
+    ["Onde roda", fitText, (m) => (m.gb <= 12 ? 1 : 0), true],
+    ["Para que serve", (m) => m.u],
+  ];
+  const body = rows.map(([k, show, val, higher]) => {
+    const w = val ? winners(ms.map(val), higher) : ms.map(() => "");
+    return `<tr><th>${k}</th>${ms.map((m, i) => `<td class="${w[i]}">${esc(show(m))}</td>`).join("")}</tr>`;
+  }).join("") + `<tr><th>Comando</th>${ms.map((m) => `<td>${cmdHtml(m)}</td>`).join("")}</tr>`;
+  $("cmpTable").className = "cmp" + (ms.length === 3 ? " three" : "");
+  $("cmpTable").innerHTML = `<thead>${head}</thead><tbody>${body}</tbody>`;
+}
+function summaryOne(m) {
+  const out = [];
+  out.push(m.tps >= 20 ? `${B(m)} escreve a ~${m.tps} tok/s: a resposta sai <b>mais rápido do que você lê</b>.`
+    : m.tps >= 5 ? `${B(m)} escreve a ~${m.tps} tok/s: dá para <b>acompanhar lendo</b>, mas a espera é perceptível.`
+    : `${B(m)} escreve a ~${m.tps} tok/s: <b>mais devagar do que você lê</b>. Bom para tarefas sem pressa.`);
+  out.push(`Uma resposta longa (500 tokens, cerca de uma página) leva <b>${secs(500 / m.tps)}</b>.`);
+  if (m.gb <= 10.2) out.push(`Ocupa ${fmt(m.gb, 1)} GB e cabe com folga na placa, sobrando espaço para conversas longas.`);
+  else if (m.gb <= 12) out.push(`Ocupa ${fmt(m.gb, 1)} GB: cabe na placa, mas sobra pouco espaço para conversas longas.`);
+  else out.push(`Ocupa ${fmt(m.gb, 1)} GB e passa dos 12 GB da placa: parte fica na RAM, que é mais lenta.`);
+  if (m.r) out.push("Raciocina antes de responder: demora mais para começar, mas erra menos em lógica e matemática.");
+  out.push(`Indicado para: ${esc(m.u.toLowerCase())}.`);
+  return out;
+}
+function diffs(ms) {
+  if (new Set(ms.map((m) => m.n)).size < ms.length) return ["Há um modelo repetido. Escolha modelos diferentes em cada seletor."];
+  const out = [], bySpeed = [...ms].sort((a, b) => b.tps - a.tps);
+  const fast = bySpeed[0], slow = bySpeed[bySpeed.length - 1], ratio = fast.tps / slow.tps;
+  if (ratio < 1.15) out.push("As velocidades são parecidas: a escolha depende da qualidade e do uso.");
+  else if (ms.length === 2) out.push(`${B(fast)} escreve <b>${fmt(ratio, 1)}× mais rápido</b> (${fast.tps} contra ${slow.tps} tok/s).`);
+  else out.push(`${B(fast)} é o mais rápido (${fast.tps} tok/s), <b>${fmt(ratio, 1)}× mais</b> que ${B(slow)} (${slow.tps} tok/s). ${B(bySpeed[1])} fica no meio, com ${bySpeed[1].tps} tok/s.`);
+  const slowOnes = ms.filter((m) => m.tps < 5);
+  if (slowOnes.length) out.push(`${joinNames(slowOnes)} ${slowOnes.length > 1 ? "ficam" : "fica"} abaixo da velocidade de leitura (~5 tok/s): você vai esperar o texto aparecer.`);
+  const fits = ms.filter((m) => m.gb <= 12), out12 = ms.filter((m) => m.gb > 12);
+  if (fits.length && out12.length) out.push(`${joinNames(fits)} ${fits.length > 1 ? "cabem" : "cabe"} inteiro${fits.length > 1 ? "s" : ""} na placa; ${joinNames(out12)} ${out12.length > 1 ? "precisam" : "precisa"} da RAM, que é bem mais lenta.`);
+  else if (!out12.length) {
+    const bySize = [...ms].sort((a, b) => a.gb - b.gb), small = bySize[0], large = bySize[bySize.length - 1];
+    if (large.gb - small.gb >= 1) out.push(`${B(small)} é o mais leve: ocupa ${fmt(large.gb - small.gb, 1)} GB a menos que ${B(large)}, sobrando mais espaço para conversas longas.`);
+  }
+  const big = [...ms].sort((a, b) => b.gb - a.gb)[0];
+  if (big !== fast && big.gb - Math.min(...ms.map((m) => m.gb)) >= 2) out.push(`${B(big)} é o maior e costuma responder melhor. Vale testar se a qualidade compensa a espera.`);
+  if (new Set(ms.map((m) => m.c)).size > 1) out.push(`Usos diferentes: ${ms.map((m) => `${B(m)} é de ${CAT[m.c]} (${esc(m.u.toLowerCase())})`).join("; ")}.`);
+  const rs = ms.filter((m) => m.r);
+  if (rs.length && rs.length < ms.length) out.push(rs.length > 1 ? `${joinNames(rs)} raciocinam antes de responder: demoram mais para começar, mas erram menos em lógica e matemática.` : `${joinNames(rs)} raciocina antes de responder: demora mais para começar, mas erra menos em lógica e matemática.`);
+  return out;
+}
+function prediction(ms, toks) {
+  const times = ms.map((m) => `${m.n} em ${secs(toks.length / m.tps)}`);
+  return `Previsão para esta resposta (${toks.length} tokens): ${times.slice(0, -1).join(", ")} e ${times[times.length - 1]}.`;
+}
+// Placar (modo de três modelos): barras proporcionais ao tempo de cada um
+function renderBoard(final) {
+  const xs = active(), ms = chosen(), toks = raceTokens();
+  const ends = ms.map((m) => toks.length / m.tps), max = Math.max(...ends);
+  const order = xs.map((x, i) => i).sort((i, j) => ends[i] - ends[j]);
+  $("board").innerHTML = `<h2>${final ? "Resultado" : "Previsão de chegada"}</h2>` + order.map((i, p) => `
+<div class="brow ${xs[i]}"><span class="pos">${p + 1}º</span><span class="nm"><span class="tag">${xs[i]}</span><b>${esc(ms[i].n)}</b></span>
+<span class="bar"><span class="bt" style="display:block;width:${(ends[i] / max) * 100}%"></span></span><span class="tm">${secs(ends[i])}</span></div>`).join("");
+}
+function render() {
+  stop();
+  fillSlots();
+  renderMode();
+  active().forEach((x) => {
+    const m = find(slots[x]), L = lane(x), [label, fg, bg] = status(m.s);
+    L.name.textContent = m.n; L.badge.textContent = label; L.badge.style.color = fg; L.badge.style.background = bg;
+    $("sel" + x).value = m.n;
+    paintLane(x, 0, 0, false);
+  });
+  const ms = chosen(), toks = raceTokens();
+  if (mode === 1) {
+    $("verdict").textContent = `Previsão: ${ms[0].n} escreve esta resposta (${toks.length} tokens) em ${secs(toks.length / ms[0].tps)}. Você levaria ${secs(toks.length / 5)} para ler.`;
+    $("diff").innerHTML = `<h2>Como ele se sai no seu PC</h2><ul>${summaryOne(ms[0]).map((d) => `<li>${d}</li>`).join("")}</ul>`;
+  } else {
+    $("verdict").textContent = new Set(ms.map((m) => m.n)).size < ms.length ? "Escolha modelos diferentes para comparar."
+      : mode === 3 ? `Os três vão escrever a mesma resposta de ${toks.length} tokens. Clique em "Começar corrida".` : prediction(ms, toks);
+    $("diff").innerHTML = `<h2>Diferencial</h2><ul>${diffs(ms).slice(0, mode === 3 ? 4 : 6).map((d) => `<li>${d}</li>`).join("")}</ul>`;
+    if (mode === 3) renderBoard(false);
+  }
+  renderTable();
+}
+
+// ---------- Simulação ----------
+function stop() { clearInterval(timer); timer = null; LETTERS.forEach((x) => (lane(x).caret.textContent = "")); }
+function start() {
+  stop();
+  const xs = active(), ms = chosen(), toks = raceTokens(), t0 = performance.now();
+  const ends = ms.map((m) => toks.length / m.tps);
+  LETTERS.forEach((x) => lane(x).el.classList.remove("first"));
+  timer = setInterval(() => {
+    const sec = (performance.now() - t0) / 1000;
+    const ns = ms.map((m) => Math.min(toks.length, Math.floor(sec * m.tps)));
+    xs.forEach((x, i) => paintLane(x, ns[i], sec, true));
+    const done = ns.map((n) => n >= toks.length);
+    const order = xs.map((x, i) => i).sort((i, j) => ends[i] - ends[j]);
+    if (done.some(Boolean)) lane(xs[order[0]]).el.classList.toggle("first", mode > 1);
+    if (mode === 1) {
+      if (done[0]) {
+        stop();
+        const read = Math.round((ends[0] * 5 / toks.length) * 100);
+        $("verdict").textContent = read >= 100
+          ? `${ms[0].n} terminou em ${secs(ends[0])}. Mais devagar do que a leitura: você ficaria esperando o texto.`
+          : `${ms[0].n} terminou em ${secs(ends[0])}. Nesse tempo você teria lido só ${read}% da resposta.`;
+      }
+    } else if (done.every(Boolean)) {
+      stop();
+      const f = order[0], l = order[order.length - 1], ratio = ends[l] / ends[f];
+      $("verdict").textContent = ratio < 1.05 ? `Empate técnico: todos terminaram em cerca de ${secs(ends[f])}.`
+        : mode === 2 ? `${ms[f].n} venceu: ${fmt(ratio, 1)}× mais rápido (${secs(ends[f])} contra ${secs(ends[l])}).`
+        : `${ms[f].n} chegou primeiro: ${fmt(ratio, 1)}× mais rápido que ${ms[l].n}.`;
+      if (mode === 3) renderBoard(true);
+    } else if (done.some(Boolean)) {
+      const fin = order.filter((i) => done[i]), rest = order.filter((i) => !done[i]);
+      $("verdict").textContent = `${fin.map((i) => `${ms[i].n} terminou em ${secs(ends[i])}`).join("; ")}. Ainda escrevendo: ${rest.map((i) => ms[i].n).join(" e ")}…`;
+    }
+  }, 40);
+}
+
+// ---------- Controles ----------
+$("go").onclick = start;
+$("stop").onclick = stop;
+document.querySelector(".seg").onclick = (e) => {
+  const b = e.target.closest("[data-mode]"); if (!b) return;
+  mode = +b.dataset.mode; fillSlots(); saveState(); render();
+};
+LETTERS.forEach((x) => { $("sel" + x).onchange = (e) => { slots[x] = e.target.value; saveState(); render(); }; });
+window.addEventListener("hashchange", () => { if (applyState(readState())) { renderOptions(); render(); } });
+
+pending = readState();
+if (applyState(pending)) pending = null;
+renderOptions(); render();
+loadAutoModels(() => {
+  if (pending && applyState(pending)) pending = null;
+  renderOptions(); render();
+});
+</script>
+</body>
+</html>
