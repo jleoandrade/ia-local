@@ -1,6 +1,32 @@
 {
- "updated": "2026-10-06T15:58:36.267Z",
+ "updated": "2026-10-07T16:31:57.694Z",
  "models": [
+  {
+   "id": "unsloth/embeddinggemma-2-GGUF",
+   "n": "embeddinggemma 2",
+   "gb": 0.2,
+   "tps": 0,
+   "s": 85,
+   "c": "emb",
+   "r": false,
+   "d": "Modelo de embeddings criado por google com 271M parâmetros; cabe na RTX 3060. Contexto de até 256 mil tokens. Licença apache-2.0: permite uso comercial.",
+   "u": "Busca em documentos e RAG",
+   "created": "2026-10-06T10:58:50.000Z",
+   "added": "07/10/2026"
+  },
+  {
+   "id": "ggml-org/MiMo-V2.6-Pro-RL-GGUF",
+   "n": "MiMo V2.6 Pro RL",
+   "gb": 612.7,
+   "tps": 0,
+   "s": 0,
+   "c": "vis",
+   "r": false,
+   "d": "Modelo de visão e texto criado por XiaomiMiMo com 1021B parâmetros; grande demais para este PC. Contexto de até 1024 mil tokens. Licença mit: permite uso comercial.",
+   "u": "Ler imagens, prints e documentos",
+   "created": "2026-10-02T20:26:54.000Z",
+   "added": "07/10/2026"
+  },
   {
    "id": "ggml-org/MiMo-V2.6-Pro-MOPD-GGUF",
    "n": "MiMo V2.6 Pro MOPD",
@@ -548,19 +574,6 @@
    "added": "03/10/2026"
   },
   {
-   "id": "Edge0/Audio8-TTS-Preview-0.6b",
-   "n": "Audio8 TTS Preview 0.6b",
-   "gb": 1.2,
-   "tps": 0,
-   "s": 85,
-   "c": "tts",
-   "r": false,
-   "d": "Modelo de voz (texto → fala) criado por Edge0 com 601M parâmetros; cabe na RTX 3060. Multilíngue; o português não aparece na lista oficial. Licença apache-2.0: permite uso comercial.",
-   "u": "Narração, leitura de textos, assistentes de voz",
-   "created": "2026-07-28T07:53:00.000Z",
-   "added": "03/10/2026"
-  },
-  {
    "id": "unsloth/Kimi-K3-GGUF",
    "n": "Kimi K3",
    "gb": 1667.7,
@@ -639,19 +652,6 @@
    "added": "03/10/2026"
   },
   {
-   "id": "Hcompany/NeoMME-260M",
-   "n": "NeoMME 260M",
-   "gb": 0.5,
-   "tps": 0,
-   "s": 85,
-   "c": "emb",
-   "r": false,
-   "d": "Modelo de embeddings criado por Hcompany com 263M parâmetros; cabe na RTX 3060. Licença apache-2.0: permite uso comercial.",
-   "u": "Busca em documentos e RAG",
-   "created": "2026-07-16T09:07:30.000Z",
-   "added": "05/10/2026"
-  },
-  {
    "id": "unsloth/inkling-GGUF",
    "n": "inkling",
    "gb": 568.2,
@@ -689,6 +689,19 @@
    "u": "Busca em documentos e RAG",
    "created": "2026-07-14T07:32:18.000Z",
    "added": "03/10/2026"
+  },
+  {
+   "id": "hotchpotch/bekko-embedding-v1-a8m",
+   "n": "bekko embedding v1 a8m",
+   "gb": 0.2,
+   "tps": 0,
+   "s": 85,
+   "c": "emb",
+   "r": false,
+   "d": "Modelo de embeddings criado por hotchpotch com 106M parâmetros; cabe na RTX 3060. Licença mit: permite uso comercial.",
+   "u": "Busca em documentos e RAG",
+   "created": "2026-07-07T04:37:59.000Z",
+   "added": "07/10/2026"
   },
   {
    "id": "Qwen/Qwen3-ASR-1.7B-hf",
@@ -730,6 +743,19 @@
    "added": "03/10/2026"
   },
   {
+   "id": "lightonai/mLateOn",
+   "n": "mLateOn",
+   "gb": 0.6,
+   "tps": 0,
+   "s": 85,
+   "c": "emb",
+   "r": false,
+   "d": "Modelo de embeddings criado por lightonai com 307M parâmetros; cabe na RTX 3060. Suporta português. Licença apache-2.0: permite uso comercial.",
+   "u": "Busca em documentos e RAG",
+   "created": "2026-06-22T14:29:39.000Z",
+   "added": "07/10/2026"
+  },
+  {
    "id": "Edge0/ARK-ASR-3B",
    "n": "ARK ASR 3B",
    "gb": 8.1,
@@ -741,19 +767,6 @@
    "u": "Transcrever áudios, reuniões e vídeos",
    "created": "2026-06-22T07:04:45.000Z",
    "added": "06/10/2026"
-  },
-  {
-   "id": "CohereLabs/cohere-transcribe-arabic-07-2026",
-   "n": "cohere transcribe arabic 07 2026",
-   "gb": 4.1,
-   "tps": 0,
-   "s": 85,
-   "c": "stt",
-   "r": false,
-   "d": "Modelo de transcrição (fala → texto) criado por CohereLabs com 2,1B parâmetros; cabe na RTX 3060. Multilíngue; o português não aparece na lista oficial. Licença apache-2.0: permite uso comercial.",
-   "u": "Transcrever áudios, reuniões e vídeos",
-   "created": "2026-06-18T19:44:59.000Z",
-   "added": "03/10/2026"
   },
   {
    "id": "unsloth/GLM-5.2-GGUF",
@@ -1133,19 +1146,6 @@
    "added": "06/10/2026"
   },
   {
-   "id": "ibm-granite/granite-embedding-97m-multilingual-r2",
-   "n": "granite embedding 97m multilingual r2",
-   "gb": 0.2,
-   "tps": 0,
-   "s": 85,
-   "c": "emb",
-   "r": false,
-   "d": "Modelo de embeddings criado por ibm-granite com 97M parâmetros; cabe na RTX 3060. Suporta português. Licença apache-2.0: permite uso comercial.",
-   "u": "Busca em documentos e RAG",
-   "created": "2026-04-20T15:15:55.000Z",
-   "added": "03/10/2026"
-  },
-  {
    "id": "unsloth/Qwen3.6-35B-A3B-GGUF",
    "n": "Qwen3.6 35B A3B",
    "gb": 20.8,
@@ -1222,6 +1222,19 @@
    "u": "Narração, leitura de textos, assistentes de voz",
    "created": "2026-04-03T05:25:50.000Z",
    "added": "03/10/2026"
+  },
+  {
+   "id": "jinaai/jina-embeddings-v5-omni-nano",
+   "n": "jina embeddings v5 omni nano",
+   "gb": 2,
+   "tps": 0,
+   "s": 85,
+   "c": "emb",
+   "r": false,
+   "d": "Modelo de embeddings criado por jinaai com 986M parâmetros; cabe na RTX 3060. Licença cc-by-nc-4.0: só para uso não comercial.",
+   "u": "Busca em documentos e RAG",
+   "created": "2026-04-01T22:06:51.000Z",
+   "added": "07/10/2026"
   },
   {
    "id": "unsloth/gemma-4-26B-A4B-it-GGUF",
@@ -1627,6 +1640,19 @@
    "added": "03/10/2026"
   },
   {
+   "id": "perplexity-ai/pplx-embed-v1-4b",
+   "n": "pplx embed v1 4b",
+   "gb": 8,
+   "tps": 0,
+   "s": 85,
+   "c": "emb",
+   "r": false,
+   "d": "Modelo de embeddings criado por perplexity-ai com 4,0B parâmetros; cabe na RTX 3060. Licença mit: permite uso comercial.",
+   "u": "Busca em documentos e RAG",
+   "created": "2026-01-20T13:15:23.000Z",
+   "added": "07/10/2026"
+  },
+  {
    "id": "unsloth/GLM-4.7-Flash-GGUF",
    "n": "GLM 4.7 Flash",
    "gb": 18,
@@ -1718,19 +1744,6 @@
    "added": "03/10/2026"
   },
   {
-   "id": "unsloth/GLM-4.7-REAP-218B-A32B-GGUF",
-   "n": "GLM 4.7 REAP 218B A32B",
-   "gb": 131,
-   "tps": 0,
-   "s": 0,
-   "c": "chat",
-   "r": false,
-   "d": "Modelo de texto criado por cerebras com 218B parâmetros (MoE, ~32B ativos por token); grande demais para este PC. Contexto de até 198 mil tokens. Focado em inglês. Licença mit: permite uso comercial.",
-   "u": "Chat e tarefas gerais",
-   "created": "2026-01-12T17:50:18.000Z",
-   "added": "03/10/2026"
-  },
-  {
    "id": "kugelaudio/kugelaudio-0-open",
    "n": "kugelaudio 0 open",
    "gb": 18.7,
@@ -1796,17 +1809,17 @@
    "added": "03/10/2026"
   },
   {
-   "id": "nvidia/nemotron-speech-streaming-en-0.6b",
-   "n": "nemotron speech streaming en 0.6b",
-   "gb": 1.2,
+   "id": "nvidia/llama-nemotron-embed-vl-1b-v2",
+   "n": "llama nemotron embed vl 1b v2",
+   "gb": 3.4,
    "tps": 0,
    "s": 85,
-   "c": "stt",
+   "c": "emb",
    "r": false,
-   "d": "Modelo de transcrição (fala → texto) criado por nvidia com 618M parâmetros; cabe na RTX 3060. Licença nvidia-open-model-license: tem regras próprias; confira antes de uso comercial.",
-   "u": "Transcrever áudios, reuniões e vídeos",
-   "created": "2025-12-17T01:07:38.000Z",
-   "added": "05/10/2026"
+   "d": "Modelo de embeddings criado por nvidia com 1,7B parâmetros; cabe na RTX 3060. Licença nvidia-open-model-license: tem regras próprias; confira antes de uso comercial.",
+   "u": "Busca em documentos e RAG",
+   "created": "2025-12-03T17:07:48.000Z",
+   "added": "07/10/2026"
   },
   {
    "id": "ggml-org/Ministral-3-14B-Reasoning-2512-GGUF",
@@ -2095,6 +2108,19 @@
    "added": "03/10/2026"
   },
   {
+   "id": "nvidia/canary-1b-v2",
+   "n": "canary 1b v2",
+   "gb": 2,
+   "tps": 0,
+   "s": 85,
+   "c": "stt",
+   "r": false,
+   "d": "Modelo de transcrição (fala → texto) criado por nvidia com 979M parâmetros; cabe na RTX 3060. Suporta português. Licença cc-by-4.0: permite uso comercial.",
+   "u": "Transcrever áudios, reuniões e vídeos",
+   "created": "2025-08-04T13:34:41.000Z",
+   "added": "07/10/2026"
+  },
+  {
    "id": "nvidia/parakeet-tdt-0.6b-v3",
    "n": "parakeet tdt 0.6b v3",
    "gb": 1.3,
@@ -2261,19 +2287,6 @@
    "d": "Modelo de vídeo criado por vrgamedevgirl84 com 14B parâmetros; cabe na RTX 3060. Além dele, precisa do codificador de texto e do VAE. Focado em inglês. Licença apache-2.0: permite uso comercial.",
    "u": "Gerar vídeos curtos",
    "created": "2025-06-07T01:47:02.000Z",
-   "added": "03/10/2026"
-  },
-  {
-   "id": "Qwen/Qwen3-Embedding-4B",
-   "n": "Qwen3 Embedding 4B",
-   "gb": 8,
-   "tps": 0,
-   "s": 85,
-   "c": "emb",
-   "r": false,
-   "d": "Modelo de embeddings criado por Qwen com 4,0B parâmetros; cabe na RTX 3060. Licença apache-2.0: permite uso comercial.",
-   "u": "Busca em documentos e RAG",
-   "created": "2025-06-03T14:31:33.000Z",
    "added": "03/10/2026"
   },
   {
@@ -2511,19 +2524,6 @@
    "added": "03/10/2026"
   },
   {
-   "id": "nomic-ai/nomic-embed-text-v2-moe",
-   "n": "nomic embed text v2 moe",
-   "gb": 1,
-   "tps": 0,
-   "s": 85,
-   "c": "emb",
-   "r": false,
-   "d": "Modelo de embeddings criado por nomic-ai com 475M parâmetros; cabe na RTX 3060. Suporta português. Licença apache-2.0: permite uso comercial.",
-   "u": "Busca em documentos e RAG",
-   "created": "2025-02-07T22:50:07.000Z",
-   "added": "05/10/2026"
-  },
-  {
    "id": "Alibaba-NLP/gte-modernbert-base",
    "n": "gte modernbert base",
    "gb": 0.3,
@@ -2534,19 +2534,6 @@
    "d": "Modelo de embeddings criado por answerdotai com 149M parâmetros; cabe na RTX 3060. Focado em inglês. Licença apache-2.0: permite uso comercial.",
    "u": "Busca em documentos e RAG",
    "created": "2025-01-20T03:03:48.000Z",
-   "added": "05/10/2026"
-  },
-  {
-   "id": "datasocietyco/bge-base-en-v1.5-course-recommender-v5",
-   "n": "bge base en v1.5 course recommender v5",
-   "gb": 0.2,
-   "tps": 0,
-   "s": 85,
-   "c": "emb",
-   "r": false,
-   "d": "Modelo de embeddings criado por BAAI com 109M parâmetros; cabe na RTX 3060.",
-   "u": "Busca em documentos e RAG",
-   "created": "2025-01-09T11:01:33.000Z",
    "added": "05/10/2026"
   },
   {
@@ -2600,6 +2587,19 @@
    "u": "Gerar vídeos curtos",
    "created": "2024-12-17T06:03:06.000Z",
    "added": "06/10/2026"
+  },
+  {
+   "id": "city96/LTX-Video-gguf",
+   "n": "LTX Video",
+   "gb": 1.2,
+   "tps": 0,
+   "s": 40,
+   "c": "vid",
+   "r": false,
+   "d": "Modelo de vídeo criado por Lightricks com 1,9B parâmetros; cabe na RTX 3060. Além dele, precisa do codificador de texto e do VAE. Focado em inglês. Licença other: tem regras próprias; confira antes de uso comercial.",
+   "u": "Gerar vídeos curtos",
+   "created": "2024-12-07T22:40:27.000Z",
+   "added": "07/10/2026"
   }
  ]
 }
