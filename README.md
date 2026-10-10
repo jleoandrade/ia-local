@@ -61,8 +61,8 @@ Depois disso ele roda sozinho todo dia às 06:17 (horário de Brasília). Quando
 - **O que entra:** modelos com pelo menos 1.000 downloads (para pular testes e lixo) e com contagem de parâmetros publicada (sem ela não dá para estimar o tamanho).
 - **Categoria:** Código (nome com coder, code, devstral), Visão (modelos que leem imagens), Chat (os demais de texto), Imagem, Vídeo, Fala → texto, Texto → fala e Embeddings (pela tarefa declarada no Hugging Face). **Raciocínio** é uma etiqueta extra ("raciocina") para modelos com R1, think, reason, QwQ ou Magistral no nome. "Leves" e "Novos" são filtros do site e valem para eles automaticamente.
 - **Tamanho:** GGUF = parâmetros × 0,6 GB por bilhão (Q4_K_M); áudio e embeddings = parâmetros × 2 GB por bilhão (FP16).
-- **Velocidade (texto e visão):** quanto do modelo precisa ser lido a cada token, dividido pela banda da GPU (360 GB/s) ou, na parte que não cabe nos 12 GB, pela banda da RAM. Em modelos MoE (nome com `A3B`, `A10B`…) conta só a parte ativa. Se o modelo ocupa mais de 85% da VRAM, a velocidade leva −30%, porque sobra pouco espaço para o contexto. A conta completa, com exemplos, está na seção **Como calculamos** do site.
-- **Classificação:**
+- **Velocidade (texto e visão):** quanto do modelo precisa ser lido a cada token, dividido pela banda da GPU (360 GB/s) ou, na parte que não cabe nos 12 GB, pela banda da RAM. Em modelos MoE conta só a parte ativa: pelo nome (`A3B`, `A10B`…) ou, quando o nome não diz, pelo `config.json` do modelo de origem (número de especialistas e quantos trabalham por token). Se o modelo ocupa mais de 85% da VRAM, a velocidade leva −30%, porque sobra pouco espaço para o contexto. A conta completa, com exemplos, está na seção **Como calculamos** do site.
+- **Classificação:** a nota (0–100) usa a mesma régua para os modelos novos e para o catálogo principal (`scoreOf` em `site.js`); no catálogo, só o tamanho e os tok/s vêm do canirun.ai.
 
   | Rótulo | Texto e visão | Imagem e vídeo | Áudio e embeddings |
   |---|---|---|---|
