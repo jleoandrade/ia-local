@@ -96,7 +96,7 @@ footer{border-top:1px solid #DEDAD3;padding-top:20px;font-size:15px;line-height:
 <p id="empty" hidden style="margin:0;font-size:17px;color:#5C5F66">Nenhum modelo encontrado com esse filtro.</p>
 </section>
 
-<footer>Nota (0–100), tamanho e tok/s: estimativas do canirun.ai para RTX 3060 12 GB. Simulação aproximada (1 token ≈ 4 caracteres). Modelos acima de 12 GB usam a RAM do sistema e ficam bem mais lentos. Modelos de imagem e vídeo não geram texto, por isso aparecem com ~0 tok/s. Áudio e embeddings não usam tok/s: a nota deles vem do tamanho, e o tamanho é aproximado (FP16, salvo indicação). Modelos marcados como "Novo" são encontrados automaticamente no Hugging Face e têm números estimados.<span id="updated"></span></footer>
+<footer>Tamanho e tok/s do catálogo: estimativas do canirun.ai para RTX 3060 12 GB. A nota (0–100) usa a mesma régua para todos os modelos, inclusive os novos (veja "Como calculamos"). Simulação aproximada (1 token ≈ 4 caracteres). Modelos acima de 12 GB usam a RAM do sistema e ficam bem mais lentos. Modelos de imagem e vídeo não geram texto, por isso aparecem com ~0 tok/s. Áudio e embeddings não usam tok/s: a nota deles vem do tamanho, e o tamanho é aproximado (FP16, salvo indicação). Modelos marcados como "Novo" são encontrados automaticamente no Hugging Face e têm números estimados.<span id="updated"></span></footer>
 </div>
 
 <script src="site.js"></script>
@@ -106,7 +106,7 @@ let filter = "all", q = "", level = null;
 
 // Melhores escolhas por tarefa (curadoria para a RTX 3060 12 GB)
 const PICKS = [
-  ["Assistente do dia a dia", "GPT-OSS 20B", "O mais forte que cabe inteiro na placa e, por ser MoE, muito rápido. Aparece como Usável porque ocupa quase toda a VRAM e sobra pouco espaço para conversas longas."],
+  ["Assistente do dia a dia", "GPT-OSS 20B", "O mais forte que cabe inteiro na placa e, por ser MoE, muito rápido. Ocupa quase toda a VRAM, então sobra pouco espaço para conversas longas."],
   ["Escrever em português", "Gemma 3 12B", "Texto natural em português, cabe com folga e também lê imagens."],
   ["Programar", "Qwen 2.5 Coder 7B", "Gera e explica código rápido. Para autocompletar no editor, use a versão 1.5B."],
   ["Raciocínio e matemática", "Qwen 3 14B", "Pensa antes de responder e mantém boa velocidade, sem sair da placa."],

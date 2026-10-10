@@ -65,7 +65,40 @@ function metadata(info, weights) {
   return { by: maker ? ` criado por ${maker}` : "", text: parts.length ? " " + parts.join(" ") : "" };
 }
 
-function estimate(id, cat, params, weights) {
+// Parte ativa dos modelos MoE, em bilhões de parâmetros.
+// 1) Pelo nome ("35B-A3B" → 3). 2) Pelo config.json do modelo de origem, quando o nome não diz:
+//    total − especialistas que ficam parados a cada token. Sem nada disso, conta como denso.
+const configs = new Map();
+async function configOf(id) {
+  if (!configs.has(id)) configs.set(id, getJson(`https://huggingface.co/${id}/resolve/main/config.json`).catch(() => null));
+  return configs.get(id);
+}
+function activeFromConfig(config, params) {
+  const c = config?.text_config ?? config?.language_config ?? config?.llm_config ?? config ?? {};
+  const experts = c.num_experts ?? c.num_local_experts ?? c.n_routed_experts ?? c.moe_num_experts;
+  const used = c.num_experts_per_tok ?? c.experts_per_token ?? c.moe_topk ?? c.moe_k;
+  const ffn = c.moe_intermediate_size ?? c.intermediate_size;
+  const hidden = c.hidden_size, layers = c.num_hidden_layers;
+  if (!(experts > used && used > 0 && ffn && hidden && layers)) return null;
+  // Camadas com especialistas: Nemotron marca com "E"; outros pulam as primeiras ou alternam.
+  const moeLayers = typeof c.hybrid_override_pattern === "string" ? c.hybrid_override_pattern.split("E").length - 1
+    : Math.floor((layers - (c.first_k_dense_replace ?? 0)) / (c.interleave_moe_layer_step || c.decoder_sparse_step || 1));
+  const idle = ((experts - used) * 3 * hidden * ffn * moeLayers) / 1e9;   // gate, up e down de cada especialista parado
+  const active = params - idle;
+  return active > 0.02 * params && active < params ? Math.round(active * 10) / 10 : null;
+}
+async function activeParams(r, info, params) {
+  const byName = Number((r.id.match(/(?:^|[-_/ ])A(\d+(?:\.\d+)?)B(?![a-z])/i) || [])[1]);
+  if (byName) return Math.min(byName, params);
+  const base = [].concat(info?.cardData?.base_model ?? [])[0];
+  for (const id of [base, r.id].filter(Boolean)) {
+    const active = activeFromConfig(await configOf(id), params);
+    if (active) return active;
+  }
+  return params;
+}
+
+function estimate(cat, params, weights, active) {
   const gb = params * (weights === "gguf" ? 0.6 : 2);   // GGUF em Q4_K_M (≈4,8 bits) ou FP16
   const fits = gb <= VRAM_GB, loads = gb <= VRAM_GB + RAM_GB;
   const round = (x) => Math.round(x * 10) / 10;
@@ -75,7 +108,6 @@ function estimate(id, cat, params, weights) {
     const ok = cat === "img" || cat === "vid" ? 40 : 85;
     return { active: params, gb: round(gb), tps: 0, s: fits ? ok : loads ? 10 : 0 };
   }
-  const active = Number((id.match(/A(\d+(?:\.\d+)?)B/i) || [])[1]) || params;  // MoE: "35B-A3B"
   const perToken = gb * Math.min(1, active / params);   // GB lidos por token gerado
   let tps = 0;
   if (fits) {
@@ -116,7 +148,7 @@ function describe(r, cat, params, e, m) {
   return {
     c: code ? "code" : vision ? "vis" : "chat",
     r: reasoning,
-    d: `${kind}${m.by} com ${size}${moe ? ` (MoE, ~${e.active}B ativos por token)` : ""}; ${fit}.${m.text}`,
+    d: `${kind}${m.by} com ${size}${moe ? ` (MoE, ~${String(e.active).replace(".", ",")}B ativos por token)` : ""}; ${fit}.${m.text}`,
     u: code ? "Programação, autocomplete, agentes de código"
       : vision ? "Ler imagens, prints e documentos"
       : reasoning ? "Raciocínio, matemática, lógica"
@@ -141,7 +173,8 @@ for (const src of SOURCES) {
     const info = await detailsOf(r.id).catch(() => null);
     const params = (info?.[src.weights]?.total ?? 0) / 1e9;
     if (!params) continue;         // sem contagem de parâmetros não dá para estimar
-    const e = estimate(r.id, group, params, src.weights);
+    const active = group === "text" ? await activeParams(r, info, params) : params;
+    const e = estimate(group, params, src.weights, active);
     models.push({ id: r.id, n, gb: e.gb, tps: e.tps, s: e.s, ...describe(r, group, params, e, metadata(info, src.weights)), created: r.createdAt ?? "", added: addedOn.get(r.id) ?? today });
   }
 }
