@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-09T16:15:25.099Z",
+ "updated": "2026-10-10T15:24:21.655Z",
  "models": [
   {
    "id": "mlx-community/embeddinggemma-2-bf16",
@@ -132,19 +132,6 @@
    "added": "08/10/2026"
   },
   {
-   "id": "topk-io/topk-embed-v1-small",
-   "n": "topk embed v1 small",
-   "gb": 4.4,
-   "tps": 0,
-   "s": 85,
-   "c": "emb",
-   "r": false,
-   "d": "Modelo de embeddings criado por Qwen com 2,2B parâmetros; cabe na RTX 3060. Suporta português. Licença apache-2.0: permite uso comercial.",
-   "u": "Busca em documentos e RAG",
-   "created": "2026-09-23T11:44:43.000Z",
-   "added": "03/10/2026"
-  },
-  {
    "id": "topk-io/topk-embed-v1-xsmall",
    "n": "topk embed v1 xsmall",
    "gb": 1.7,
@@ -194,19 +181,6 @@
    "d": "Modelo de visão e texto criado por XiaomiMiMo com 9,0B parâmetros; cabe inteiro na RTX 3060. Contexto de até 256 mil tokens. Licença mit: permite uso comercial.",
    "u": "Ler imagens, prints e documentos",
    "created": "2026-09-21T21:31:35.000Z",
-   "added": "03/10/2026"
-  },
-  {
-   "id": "Edge0/Audio8-ASR-Infinite",
-   "n": "Audio8 ASR Infinite",
-   "gb": 8.2,
-   "tps": 0,
-   "s": 85,
-   "c": "stt",
-   "r": false,
-   "d": "Modelo de transcrição (fala → texto) criado por Edge0 com 4,1B parâmetros; cabe na RTX 3060. Multilíngue; o português não aparece na lista oficial. Licença apache-2.0: permite uso comercial.",
-   "u": "Transcrever áudios, reuniões e vídeos",
-   "created": "2026-09-21T15:03:21.000Z",
    "added": "03/10/2026"
   },
   {
@@ -650,19 +624,6 @@
    "u": "Ler imagens, prints e documentos",
    "created": "2026-07-14T15:42:22.000Z",
    "added": "03/10/2026"
-  },
-  {
-   "id": "hotchpotch/bekko-embedding-v1-a8m",
-   "n": "bekko embedding v1 a8m",
-   "gb": 0.2,
-   "tps": 0,
-   "s": 85,
-   "c": "emb",
-   "r": false,
-   "d": "Modelo de embeddings criado por hotchpotch com 106M parâmetros; cabe na RTX 3060. Licença mit: permite uso comercial.",
-   "u": "Busca em documentos e RAG",
-   "created": "2026-07-07T04:37:59.000Z",
-   "added": "07/10/2026"
   },
   {
    "id": "Qwen/Qwen3-ASR-1.7B-hf",
@@ -1588,6 +1549,19 @@
    "added": "03/10/2026"
   },
   {
+   "id": "Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice",
+   "n": "Qwen3 TTS 12Hz 0.6B CustomVoice",
+   "gb": 1.8,
+   "tps": 0,
+   "s": 85,
+   "c": "tts",
+   "r": false,
+   "d": "Modelo de voz (texto → fala) criado por Qwen com 906M parâmetros; cabe na RTX 3060. Suporta português. Licença apache-2.0: permite uso comercial.",
+   "u": "Narração, leitura de textos, assistentes de voz",
+   "created": "2026-01-21T08:57:38.000Z",
+   "added": "10/10/2026"
+  },
+  {
    "id": "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
    "n": "Qwen3 TTS 12Hz 1.7B CustomVoice",
    "gb": 3.8,
@@ -1692,19 +1666,6 @@
    "added": "03/10/2026"
   },
   {
-   "id": "unsloth/medgemma-1.5-4b-it-GGUF",
-   "n": "medgemma 1.5 4b it",
-   "gb": 2.3,
-   "tps": 108,
-   "s": 95,
-   "c": "vis",
-   "r": false,
-   "d": "Modelo de visão e texto criado por google com 3,9B parâmetros; cabe inteiro na RTX 3060. Contexto de até 128 mil tokens. Licença health-ai-developer-foundations: tem regras próprias; confira antes de uso comercial.",
-   "u": "Ler imagens, prints e documentos",
-   "created": "2026-01-14T00:33:08.000Z",
-   "added": "03/10/2026"
-  },
-  {
    "id": "kugelaudio/kugelaudio-0-open",
    "n": "kugelaudio 0 open",
    "gb": 18.7,
@@ -1770,19 +1731,6 @@
    "added": "03/10/2026"
   },
   {
-   "id": "nvidia/nemotron-speech-streaming-en-0.6b",
-   "n": "nemotron speech streaming en 0.6b",
-   "gb": 1.2,
-   "tps": 0,
-   "s": 85,
-   "c": "stt",
-   "r": false,
-   "d": "Modelo de transcrição (fala → texto) criado por nvidia com 618M parâmetros; cabe na RTX 3060. Licença nvidia-open-model-license: tem regras próprias; confira antes de uso comercial.",
-   "u": "Transcrever áudios, reuniões e vídeos",
-   "created": "2025-12-17T01:07:38.000Z",
-   "added": "09/10/2026"
-  },
-  {
    "id": "nvidia/llama-nemotron-embed-vl-1b-v2",
    "n": "llama nemotron embed vl 1b v2",
    "gb": 3.4,
@@ -1846,6 +1794,19 @@
    "u": "Ler imagens, prints e documentos",
    "created": "2025-12-02T14:49:12.000Z",
    "added": "03/10/2026"
+  },
+  {
+   "id": "MediaTek-Research/Breeze-ASR-26",
+   "n": "Breeze ASR 26",
+   "gb": 3.1,
+   "tps": 0,
+   "s": 85,
+   "c": "stt",
+   "r": false,
+   "d": "Modelo de transcrição (fala → texto) criado por openai com 1,5B parâmetros; cabe na RTX 3060. Multilíngue; o português não aparece na lista oficial. Licença apache-2.0: permite uso comercial.",
+   "u": "Transcrever áudios, reuniões e vídeos",
+   "created": "2025-11-28T04:01:35.000Z",
+   "added": "10/10/2026"
   },
   {
    "id": "city96/FLUX.2-dev-gguf",
@@ -2381,19 +2342,6 @@
    "added": "03/10/2026"
   },
   {
-   "id": "cl-nagoya/ruri-v3-130m",
-   "n": "ruri v3 130m",
-   "gb": 0.3,
-   "tps": 0,
-   "s": 85,
-   "c": "emb",
-   "r": false,
-   "d": "Modelo de embeddings criado por cl-nagoya com 132M parâmetros; cabe na RTX 3060. Licença apache-2.0: permite uso comercial.",
-   "u": "Busca em documentos e RAG",
-   "created": "2025-04-09T04:07:50.000Z",
-   "added": "06/10/2026"
-  },
-  {
    "id": "city96/Wan2.1-Fun-14B-Control-gguf",
    "n": "Wan2.1 Fun 14B Control",
    "gb": 9.8,
@@ -2511,6 +2459,19 @@
    "added": "03/10/2026"
   },
   {
+   "id": "KBLab/kb-whisper-large",
+   "n": "kb whisper large",
+   "gb": 3.2,
+   "tps": 0,
+   "s": 85,
+   "c": "stt",
+   "r": false,
+   "d": "Modelo de transcrição (fala → texto) criado por openai com 1,6B parâmetros; cabe na RTX 3060. Licença apache-2.0: permite uso comercial.",
+   "u": "Transcrever áudios, reuniões e vídeos",
+   "created": "2025-02-14T14:25:04.000Z",
+   "added": "10/10/2026"
+  },
+  {
    "id": "Alibaba-NLP/gte-modernbert-base",
    "n": "gte modernbert base",
    "gb": 0.3,
@@ -2589,17 +2550,56 @@
    "added": "06/10/2026"
   },
   {
-   "id": "Mozilla/smart-tab-embedding",
-   "n": "smart tab embedding",
-   "gb": 0,
+   "id": "city96/LTX-Video-gguf",
+   "n": "LTX Video",
+   "gb": 1.2,
+   "tps": 0,
+   "s": 40,
+   "c": "vid",
+   "r": false,
+   "d": "Modelo de vídeo criado por Lightricks com 1,9B parâmetros; cabe na RTX 3060. Além dele, precisa do codificador de texto e do VAE. Focado em inglês. Licença other: tem regras próprias; confira antes de uso comercial.",
+   "u": "Gerar vídeos curtos",
+   "created": "2024-12-07T22:40:27.000Z",
+   "added": "10/10/2026"
+  },
+  {
+   "id": "city96/stable-diffusion-3.5-medium-gguf",
+   "n": "stable diffusion 3.5 medium",
+   "gb": 1.5,
+   "tps": 0,
+   "s": 40,
+   "c": "img",
+   "r": false,
+   "d": "Modelo de imagem criado por stabilityai com 2,5B parâmetros; cabe na RTX 3060. Além dele, precisa do codificador de texto e do VAE. Focado em inglês. Licença stabilityai-ai-community: tem regras próprias; confira antes de uso comercial.",
+   "u": "Gerar e editar imagens",
+   "created": "2024-10-30T01:08:44.000Z",
+   "added": "10/10/2026"
+  },
+  {
+   "id": "ai4bharat/indic-parler-tts",
+   "n": "indic parler tts",
+   "gb": 1.9,
    "tps": 0,
    "s": 85,
-   "c": "emb",
+   "c": "tts",
    "r": false,
-   "d": "Modelo de embeddings criado por sentence-transformers com 23M parâmetros; cabe na RTX 3060.",
-   "u": "Busca em documentos e RAG",
-   "created": "2024-12-16T22:29:12.000Z",
-   "added": "08/10/2026"
+   "d": "Modelo de voz (texto → fala) criado por ai4bharat com 938M parâmetros; cabe na RTX 3060. Multilíngue; o português não aparece na lista oficial. Licença apache-2.0: permite uso comercial.",
+   "u": "Narração, leitura de textos, assistentes de voz",
+   "created": "2024-10-28T08:29:09.000Z",
+   "added": "10/10/2026"
+  },
+  {
+   "id": "city96/stable-diffusion-3.5-large-turbo-gguf",
+   "n": "stable diffusion 3.5 large turbo",
+   "gb": 4.9,
+   "tps": 0,
+   "s": 40,
+   "c": "img",
+   "r": false,
+   "d": "Modelo de imagem criado por stabilityai com 8,1B parâmetros; cabe na RTX 3060. Além dele, precisa do codificador de texto e do VAE. Focado em inglês. Licença stabilityai-ai-community: tem regras próprias; confira antes de uso comercial.",
+   "u": "Gerar e editar imagens",
+   "created": "2024-10-23T02:21:22.000Z",
+   "added": "10/10/2026"
   }
  ]
 }
